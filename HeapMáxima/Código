@@ -1,1 +1,157 @@
+   #include <iostream>
+   #include <vector>
+   #include <algorithm>
+
+    using namespace std;
+// Função que organiza o heap, garantindo que o nó pai tenha valor maior ou igual aos filhos
+
+        void heapify(vector<int>& heap, int i, int n) {
+            int esq = 2 * i + 1;
+            int dir = 2 * i + 2;
+            int largest = i;
+            if (esq < n && heap[esq] > heap[largest]) {
+             largest = esq;
+           }
+            if (dir < n && heap[dir] > heap[largest]) {
+             largest = dir;
+   }
+            // Se o maior elemento não for o nó pai, faz a troca e continua a recursão para o filho trocado
+
+            if (largest != i) {
+              swap(heap[i], heap[largest]);
+             heapify(heap, largest, n);
+        }
+            }
+// Função que constroi o heap a partir de um vetor, organizando todos os nós pais
+
+            void build_heap(vector<int>& heap) {
+            int n = heap.size();
+            for (int i = n / 2 - 1; i >= 0; i--) {
+             heapify(heap, i, n);
+ }
+        }
+// Função que insere um elemento no heap e garante que ele mantenha a propriedade de máximo
+
+            void heap_push(vector<int>& heap, int x) {
+             heap.push_back(x);
+            int i = heap.size() - 1;
+            int parent = (i - 1) / 2;
+            while (i > 0 && heap[parent] < heap[i]) {
+               swap(heap[i], heap[parent]);
+              i = parent;
+             parent = (i - 1) / 2;
+            }
+ }
+// Função que retorna o maior elemento do heap
+
+            int heap_topo(vector<int>& heap) {
+            return heap[0];
+        }
+// Função que extrai o maior elemento do heap e mantém a propriedade de máximo
+
+            void heap_pop(vector<int>& heap) {
+            int n = heap.size() - 1;
+               heap[0] = heap[n];
+              heap.pop_back();
+             heapify(heap, 0, n);
+            }
+// Função que remove um elemento específico do heap e mantém a propriedade de máximo
+
+            void heap_remove(vector<int>& heap, int x) {
+            int n = heap.size();
+            int i = find(heap.begin(), heap.end(), x) - heap.begin();
+              heap[i] = heap[n - 1];
+             heap.pop_back();
+            if (i < n - 1) {
+             heapify(heap, i, n - 1);
+   }
+            while (i > 0 && heap[(i - 1) / 2] < heap[i]) {
+              swap(heap[i], heap[(i - 1) / 2]);
+             i = (i - 1) / 2;
+        }
+            }
+// Função que exibe os elementos do heap em níveis
+
+            void display_heap(vector<int>& heap) {
+            int n = heap.size();
+            int level = 0;
+            int i = 0;
+            while (i < n) {
+            int end = min(i + (1 << level), n);
+            for (int j = i; j < end; j++) {
+             cout << heap[j] << " ";
+   }
+               cout << endl;
+              i = end;
+             level++;
+        }
+            }
+
+            int main() {
+             vector<int> heap;
+            int n;
+               cout << "Infome a quantidade de elementos? ";
+              cin >> n;
+             cout << "Informe a quantidade " << n << " de elementos escolhido:" << endl;
+            for (int i = 0; i < n; i++) {
+            int x;
+              cin >> x;
+             heap.push_back(x);
+           }
+             build_heap(heap);
+            while (true) {
+            cout << endl;
+            cout << "Escolha uma opcao:" << endl;
+            cout << "1- Inserir valor" << endl;
+            cout << "2- Recuperar máximo" << endl;
+            cout << "3- Extrair máximo" << endl;
+            cout << "4- Remover valor" << endl;
+            cout << "5- Exibir valores da heap:" << endl;
+            cout << "6- SAIR" << endl;
+            int op;
+                 cin >> op;
+            if (op == 1) {
+            int x;
+            cout << "Informe um valor: ";
+            cin >> x;
+               heap_push(heap, x);
+            cout << "Valor inserido." << endl;
+           } 
+            else if (op == 2) {
+            if (heap.empty()) {
+                 cout << "Heap está vazia." << endl;
+    } 
+            else {
+                 cout << "Maximo: " << heap_topo(heap) << endl;
+       }
+           } 
+            else if (op == 3) {
+            if (heap.empty()) {
+                 cout << "Heap está vazia." << endl;
+    } 
+            else {
+                  heap_pop(heap);
+                 cout << "Máximo extraido." << endl;
+       }
+           }
+            else if (op == 4) {
+            if (heap.empty()) {
+                 cout << "Heap está vazia." << endl;
+    }
+            else {
+            int x;
+                    cout << "Informe o valor a ser removido: ";
+                   cin >> x;
+                  heap_remove(heap, x);
+                 cout << "Valor removido." << endl;
+       }
+           }
+            else if (op == 5) {
+                 display_heap(heap);
+                              }
+            else if (op == 6) {
+            break;
+    }
+       }
+           }
 
